@@ -71,7 +71,7 @@ class WordPressUpdateDiscordBot {
 			return false;
 		}
 
-		wp_remote_post(
+		$response = wp_remote_post(
 			$this->webhook_url,
 			array(
 				'body' => array(
@@ -80,7 +80,11 @@ class WordPressUpdateDiscordBot {
 			)
 		);
 
-		return true;
+		if ( ! is_wp_error( $response ) ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 
