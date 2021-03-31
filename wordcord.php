@@ -10,7 +10,7 @@
  * Plugin Name:       WordPress Update Discord Bot
  * Description:       Sends post and page interactions to a designated bot user webhook.
  * Plugin URI:        https://github.com/ReviveToday/WPUpdateDiscordBot
- * Version:           alpha
+ * Version:           1
  * Author:            ReviveToday, soup-bowl
  * Author URI:        https://revive.today
  * License:           MIT
