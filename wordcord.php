@@ -71,23 +71,14 @@ class WordPressUpdateDiscordBot {
 			return false;
 		}
 
-		$payload = json_encode(
+		wp_remote_post(
+			$this->webhook_url,
 			array(
-				'content' => $message,
+				'body' => array(
+					'content' => $message,
+				),
 			)
 		);
-
-		$curlybob = curl_init( $this->webhook_url );
-		curl_setopt( $curlybob, CURLOPT_HTTPHEADER, array( 'Content-type: application/json' ) );
-		curl_setopt( $curlybob, CURLOPT_POST, 1 );
-		curl_setopt( $curlybob, CURLOPT_POSTFIELDS, $payload );
-		curl_setopt( $curlybob, CURLOPT_FOLLOWLOCATION, 1 );
-		curl_setopt( $curlybob, CURLOPT_HEADER, 0 );
-		curl_setopt( $curlybob, CURLOPT_RETURNTRANSFER, 1 );
-
-		$response = curl_exec( $curlybob );
-		//error_log( var_export( $response, true ) );
-		curl_close( $curlybob );
 
 		return true;
 	}
