@@ -28,6 +28,13 @@ class WordPressUpdateDiscordBot {
 	protected $webhook_url;
 
 	/**
+	 * Time allowed between updates, in seconds.
+	 *
+	 * @var int
+	 */
+	protected $timer;
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -39,6 +46,7 @@ class WordPressUpdateDiscordBot {
 		);
 
 		$this->webhook_url = get_option( 'wpudb_webhook_url' );
+		$this->timer       = 60;
 	}
 
 	/**
@@ -57,7 +65,7 @@ class WordPressUpdateDiscordBot {
 	 * @param WP_Post $post Post object.
 	 */
 	public function publish_handler( int $post_id, WP_Post $post ):void {
-		$this->update_discord( "New entry or updates made to **{$post->post_title}**.\n" . get_post_permalink( $post_id ) );
+		$this->update_discord( "New entry or updates made to **{$post->post_title}**.\n" . get_permalink( $post_id ) );
 	}
 
 	/**
@@ -71,6 +79,10 @@ class WordPressUpdateDiscordBot {
 			return false;
 		}
 
+		if ( ! $this->timer_check() ) {
+			return false;
+		}
+
 		$response = wp_remote_post(
 			$this->webhook_url,
 			array(
@@ -81,10 +93,37 @@ class WordPressUpdateDiscordBot {
 		);
 
 		if ( ! is_wp_error( $response ) ) {
+			$this->timer_store();
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * Checks the time with the stored timer, and gives a boolean response if a minute passed since last update.
+	 *
+	 * @return bool True if the timer check succeeds, false if not.
+	 */
+	private function timer_check():bool {
+		$lu_time = get_option( 'wpudb_timer', 0 ) + $this->timer;
+
+		if ( time() > $lu_time ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Stores the current time.
+	 *
+	 * @return bool Success.
+	 */
+	private function timer_store():bool {
+		update_option( 'wpudb_timer', time() );
+
+		return true;
 	}
 }
 
