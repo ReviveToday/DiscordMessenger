@@ -1,10 +1,6 @@
 # WordPress Update Discord Bot
+[![forthebadge](https://forthebadge.com/images/badges/built-with-wordpress.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/0-percent-optimized.svg)](https://forthebadge.com)
+[![Discord Shield](https://discordapp.com/api/guilds/823021126199934977/widget.png?style=shield)](https://revive.today/discord)
+
 Sends post and page interactions to a designated bot user webhook.
-
-## Options
-*There's currently no UI for changing settings. Edit via wp-admin/options.php or directly via a database client.*
-
-Option              | Description
-------------------- | -----------
-`wpudb_webhook_url` | The bot webhook URL provided by Discord integration.
-`wpudb_timer`       | Time of last Discord update, for limiting purposes (hard-coded limit of 1 per minute).

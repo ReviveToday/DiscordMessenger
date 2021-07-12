@@ -10,11 +10,13 @@
  * Plugin Name:       WordPress Update Discord Bot
  * Description:       Sends post and page interactions to a designated bot user webhook.
  * Plugin URI:        https://github.com/ReviveToday/WPUpdateDiscordBot
- * Version:           1
+ * Version:           1.1
  * Author:            ReviveToday, soup-bowl
  * Author URI:        https://revive.today
  * License:           MIT
  */
+
+require_once __DIR__ . '/class-settings.php';
 
 /**
  * Fun stuff.
@@ -45,8 +47,8 @@ class WordPressUpdateDiscordBot {
 			}
 		);
 
-		$this->webhook_url = get_option( 'wpudb_webhook_url' );
-		$this->timer       = 60;
+		$this->webhook_url = get_option( 'wpupdatediscordbot_hookurl' );
+		$this->timer       = get_option( 'wpupdatediscordbot_timeout', 60 );
 	}
 
 	/**
@@ -106,7 +108,7 @@ class WordPressUpdateDiscordBot {
 	 * @return bool True if the timer check succeeds, false if not.
 	 */
 	private function timer_check():bool {
-		$lu_time = get_option( 'wpudb_timer', 0 ) + $this->timer;
+		$lu_time = get_option( 'wpupdatediscordbot_lastupdate', 0 ) + $this->timer;
 
 		if ( time() > $lu_time ) {
 			return true;
@@ -121,10 +123,11 @@ class WordPressUpdateDiscordBot {
 	 * @return bool Success.
 	 */
 	private function timer_store():bool {
-		update_option( 'wpudb_timer', time() );
+		update_option( 'wpupdatediscordbot_lastupdate', time() );
 
 		return true;
 	}
 }
 
+( new wpupdatediscordbot\Settings() )->hooks();
 ( new WordPressUpdateDiscordBot() )->hooks();
