@@ -20,7 +20,7 @@ jobs:
     - name: Build Plugin Package
       uses: thedoctor0/zip-release@master
       with:
-        exclusions: '.git .github .gitignore docker-compose.yml phpcs.xml phpunit.xml'
+        exclusions: '*.git* *.github* .gitignore docker-compose.yml phpcs.xml phpunit.xml'
         filename: wordcord.zip
     - name: Upload release asset
       uses: actions/upload-release-asset@v1
