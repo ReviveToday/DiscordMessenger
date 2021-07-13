@@ -16,39 +16,38 @@
  * License:           MIT
  */
 
-require_once __DIR__ . '/class-settings.php';
+/**
+ * Autoloader.
+ */
+require_once __DIR__ . '/vendor/autoload.php';
+
+use wpupdatediscordbot\Discord;
+use wpupdatediscordbot\Settings;
 
 /**
  * Fun stuff.
  */
 class WordPressUpdateDiscordBot {
 	/**
-	 * Discord Webhook URL.
+	 * Discord functions.
 	 *
-	 * @var string
+	 * @var Discord
 	 */
-	protected $webhook_url;
+	protected $discord;
 
 	/**
-	 * Time allowed between updates, in seconds.
+	 * Settings API actions.
 	 *
-	 * @var int
+	 * @var Settings
 	 */
-	protected $timer;
+	protected $settings;
 
 	/**
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action(
-			'admin_init',
-			function() {
-				add_option( 'wpudb_webhook_url', '' );
-			}
-		);
-
-		$this->webhook_url = get_option( 'wpupdatediscordbot_hookurl' );
-		$this->timer       = get_option( 'wpupdatediscordbot_timeout', 60 );
+		$this->discord  = new Discord();
+		$this->settings = new Settings();
 	}
 
 	/**
@@ -56,6 +55,8 @@ class WordPressUpdateDiscordBot {
 	 * thread's about to jump in there and do its stuff, and you don't want to end up in the middle of invalid memory.
 	 */
 	public function hooks():void {
+		$this->settings->hooks();
+
 		add_action( 'publish_post', array( &$this, 'publish_handler' ), 10, 2 );
 		add_action( 'publish_page', array( &$this, 'publish_handler' ), 10, 2 );
 	}
@@ -67,67 +68,8 @@ class WordPressUpdateDiscordBot {
 	 * @param WP_Post $post Post object.
 	 */
 	public function publish_handler( int $post_id, WP_Post $post ):void {
-		$this->update_discord( "New entry or updates made to **{$post->post_title}**.\n" . get_permalink( $post_id ) );
-	}
-
-	/**
-	 * Sends an update to the specified Discord bot.
-	 *
-	 * @param string $message The message to send to Discord.
-	 * @return bool Success status.
-	 */
-	private function update_discord( string $message ):bool {
-		if ( empty( $this->webhook_url ) ) {
-			return false;
-		}
-
-		if ( ! $this->timer_check() ) {
-			return false;
-		}
-
-		$response = wp_remote_post(
-			$this->webhook_url,
-			array(
-				'body' => array(
-					'content' => $message,
-				),
-			)
-		);
-
-		if ( ! is_wp_error( $response ) ) {
-			$this->timer_store();
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Checks the time with the stored timer, and gives a boolean response if a minute passed since last update.
-	 *
-	 * @return bool True if the timer check succeeds, false if not.
-	 */
-	private function timer_check():bool {
-		$lu_time = get_option( 'wpupdatediscordbot_lastupdate', 0 ) + $this->timer;
-
-		if ( time() > $lu_time ) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Stores the current time.
-	 *
-	 * @return bool Success.
-	 */
-	private function timer_store():bool {
-		update_option( 'wpupdatediscordbot_lastupdate', time() );
-
-		return true;
+		$this->discord->update_discord( "New entry or updates made to **{$post->post_title}**.\n" . get_permalink( $post_id ) );
 	}
 }
 
-( new wpupdatediscordbot\Settings() )->hooks();
 ( new WordPressUpdateDiscordBot() )->hooks();
