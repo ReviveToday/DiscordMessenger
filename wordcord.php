@@ -57,18 +57,8 @@ class WordPressUpdateDiscordBot {
 	public function hooks():void {
 		$this->settings->hooks();
 
-		add_action( 'publish_post', array( &$this, 'publish_handler' ), 10, 2 );
-		add_action( 'publish_page', array( &$this, 'publish_handler' ), 10, 2 );
-	}
-
-	/**
-	 * Brings in the WordPress post/page object for hook usage.
-	 *
-	 * @param int     $post_id Post ID.
-	 * @param WP_Post $post Post object.
-	 */
-	public function publish_handler( int $post_id, WP_Post $post ):void {
-		$this->discord->update_discord( "New entry or updates made to **{$post->post_title}**.\n" . get_permalink( $post_id ) );
+		add_action( 'publish_post', array( &$this->discord, 'publish_handler' ), 10, 2 );
+		add_action( 'publish_page', array( &$this->discord, 'publish_handler' ), 10, 2 );
 	}
 }
 

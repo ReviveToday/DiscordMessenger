@@ -21,10 +21,18 @@ class Settings {
 	protected $default_timeout;
 
 	/**
+	 * The default Discord message.
+	 *
+	 * @var string
+	 */
+	protected $default_message;
+
+	/**
 	 * Registers the relevant WordPress hooks upon creation.
 	 */
 	public function hooks():void {
 		$this->default_timeout = 60;
+		$this->default_message = 'New entry or updates made to **{{post_title}}**.';
 
 		add_action( 'admin_menu', array( &$this, 'add_admin_menu' ) );
 		add_action( 'admin_init', array( &$this, 'settings_init' ) );
@@ -75,6 +83,14 @@ class Settings {
 				'default'           => $this->default_timeout,
 			)
 		);
+		register_setting(
+			'wpupdatediscordbot',
+			'wpupdatediscordbot_message',
+			array(
+				'sanitize_callback' => 'esc_html',
+				'default'           => $this->default_message,
+			)
+		);
 
 		add_settings_section(
 			'wpupdatediscordbot_section',
@@ -100,6 +116,14 @@ class Settings {
 			'wpupdatediscordbot',
 			'wpupdatediscordbot_section'
 		);
+
+		add_settings_field(
+			'wpupdatediscordbot_message',
+			__( 'Post Message', 'wordcord' ),
+			array( &$this, 'render_setting_message' ),
+			'wpupdatediscordbot',
+			'wpupdatediscordbot_section'
+		);
 	}
 
 	/**
@@ -117,10 +141,21 @@ class Settings {
 	 * Writes the timeout input box to the page.
 	 */
 	public function render_setting_timeout():void {
-		$opt = get_option( 'wpupdatediscordbot_timeout', $this->default_timeout );
+		$opt = get_option( 'wpupdatediscordbot_timeout' );
 		?>
 		<input class='ltr' type='number' name='wpupdatediscordbot_timeout' value='<?php echo intval( $opt ); ?>'> <?php esc_html_e( 'seconds', 'wordcord' ); ?>
 		<p class='description'><?php esc_html_e( 'If a post/page is published during this timeframe, no Discord post will happen', 'wordcord' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Writes the message input box to the page.
+	 */
+	public function render_setting_message():void {
+		$opt = get_option( 'wpupdatediscordbot_message' );
+		?>
+		<textarea class="large-text" name="wpupdatediscordbot_message"><?php echo esc_attr( $opt ); ?></textarea>
+		<p class='description'><?php esc_html_e( 'Accepted values are:', 'wordcord' ); ?> <strong>post_id</strong>, <strong>post_title</strong>, <strong>post_author</strong>, <strong>post_date</strong>, <strong>post_modified</strong>, <strong>post_content</strong>, <strong>post_excerpt</strong>.</p>
 		<?php
 	}
 }
