@@ -14,9 +14,6 @@ jobs:
         suggest: yes
         dev: no
         args: --profile --ignore-platform-reqs
-    - name: list stuff
-      run:
-        ls -la
     - name: Build Plugin Package
       uses: thedoctor0/zip-release@master
       with:
