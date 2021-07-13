@@ -14,9 +14,18 @@ namespace wpupdatediscordbot;
  */
 class Settings {
 	/**
+	 * The default timeout value if none is set.
+	 *
+	 * @var integer
+	 */
+	protected $default_timeout;
+
+	/**
 	 * Registers the relevant WordPress hooks upon creation.
 	 */
-	public function hooks() {
+	public function hooks():void {
+		$this->default_timeout = 60;
+
 		add_action( 'admin_menu', array( &$this, 'add_admin_menu' ) );
 		add_action( 'admin_init', array( &$this, 'settings_init' ) );
 	}
@@ -24,14 +33,25 @@ class Settings {
 	/**
 	 * Intialises the options page.
 	 */
-	public function options_page() {
-		$this->render_settings();
+	public function options_page():void {
+		?>
+		<div class="wrap">
+			<h1><?php esc_html_e( 'Discord Integration', 'wordcord' ); ?></h1>
+			<form id='wpss-conf' action='options.php' method='post'>
+			<?php
+			settings_fields( 'wpupdatediscordbot' );
+			do_settings_sections( 'wpupdatediscordbot' );
+			submit_button();
+			?>
+			</form>
+		</div>
+		<?php
 	}
 
 	/**
 	 * Registers the 'Mail' setting underneath 'Settings' in the admin GUI.
 	 */
-	public function add_admin_menu() {
+	public function add_admin_menu():void {
 		add_options_page(
 			__( 'Discord', 'wordcord' ),
 			__( 'Discord', 'wordcord' ),
@@ -44,7 +64,7 @@ class Settings {
 	/**
 	 * Initialises the settings implementation.
 	 */
-	public function settings_init() {
+	public function settings_init():void {
 		register_setting( 'wpupdatediscordbot', 'wpupdatediscordbot_hookurl' );
 		register_setting(
 			'wpupdatediscordbot',
@@ -52,7 +72,7 @@ class Settings {
 			array(
 				'type'              => 'integer',
 				'sanitize_callback' => 'intval',
-				'default'           => 60,
+				'default'           => $this->default_timeout,
 			)
 		);
 
@@ -68,12 +88,7 @@ class Settings {
 		add_settings_field(
 			'wpupdatediscordbot_hookurl',
 			__( 'Hook URL', 'wordcord' ),
-			function () {
-				$opt = get_option( 'wpupdatediscordbot_hookurl' );
-				?>
-				<input class='regular-text ltr' type='text' name='wpupdatediscordbot_hookurl' value='<?php echo esc_attr( $opt ); ?>' placeholder='https://discord.com/api/webhooks/blahblah...'>
-				<?php
-			},
+			array( &$this, 'render_setting_hook' ),
 			'wpupdatediscordbot',
 			'wpupdatediscordbot_section'
 		);
@@ -81,33 +96,30 @@ class Settings {
 		add_settings_field(
 			'wpupdatediscordbot_timeout',
 			__( 'Post Timeout', 'wordcord' ),
-			function () {
-				$opt = get_option( 'wpupdatediscordbot_timeout' );
-				?>
-				<input class='ltr' type='number' name='wpupdatediscordbot_timeout' value='<?php echo intval( $opt ); ?>'> <?php esc_html_e( 'seconds', 'wordcord' ); ?>
-				<p class='description'><?php esc_html_e( 'If a post/page is published during this timeframe, no Discord post will happen', 'wordcord' ); ?></p>
-				<?php
-			},
+			array( &$this, 'render_setting_timeout' ),
 			'wpupdatediscordbot',
 			'wpupdatediscordbot_section'
 		);
 	}
 
 	/**
-	 * Shows the configuration pane on the current page.
+	 * Writes the hook input box to the page.
 	 */
-	private function render_settings() {
+	public function render_setting_hook():void {
+		$opt = get_option( 'wpupdatediscordbot_hookurl' );
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Discord Integration', 'wordcord' ); ?></h1>
-			<form id='wpss-conf' action='options.php' method='post'>
-			<?php
-			settings_fields( 'wpupdatediscordbot' );
-			do_settings_sections( 'wpupdatediscordbot' );
-			submit_button();
-			?>
-			</form>
-		</div>
+		<input class='regular-text ltr' type='text' name='wpupdatediscordbot_hookurl' value='<?php echo esc_attr( $opt ); ?>' placeholder='https://discord.com/api/webhooks/blahblah...'>
+		<?php
+	}
+
+	/**
+	 * Writes the timeout input box to the page.
+	 */
+	public function render_setting_timeout():void {
+		$opt = get_option( 'wpupdatediscordbot_timeout', $this->default_timeout );
+		?>
+		<input class='ltr' type='number' name='wpupdatediscordbot_timeout' value='<?php echo intval( $opt ); ?>'> <?php esc_html_e( 'seconds', 'wordcord' ); ?>
+		<p class='description'><?php esc_html_e( 'If a post/page is published during this timeframe, no Discord post will happen', 'wordcord' ); ?></p>
 		<?php
 	}
 }
