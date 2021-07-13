@@ -14,6 +14,9 @@ jobs:
         suggest: yes
         dev: no
         args: --profile --ignore-platform-reqs
+    - name: list stuff
+      run:
+        ls -la
     - name: Build Plugin Package
       uses: papeloto/action-zip@v1
       with:
