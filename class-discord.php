@@ -45,7 +45,9 @@ class Discord {
 	 * @param WP_Post $post Post object.
 	 */
 	public function publish_handler( int $post_id, WP_Post $post ):void {
-		$this->update_discord( $this->rewrite_variables( $post, $this->message ) . "\n" . get_permalink( $post_id ) );
+		if ( isset( $_REQUEST['wordcord_nonce'], $_REQUEST['wordcord_postit'] ) && wp_verify_nonce( sanitize_key( $_REQUEST['wordcord_nonce'] ), 'wordcord_nonce' ) && '1' === $_REQUEST['wordcord_postit'] ) {
+			$this->update_discord( $this->rewrite_variables( $post, $this->message ) . "\n" . get_permalink( $post_id ) );
+		}
 	}
 
 	/**

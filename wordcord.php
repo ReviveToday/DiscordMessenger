@@ -10,7 +10,7 @@
  * Plugin Name:       WordPress Update Discord Bot
  * Description:       Sends post and page interactions to a designated bot user webhook.
  * Plugin URI:        https://github.com/ReviveToday/WPUpdateDiscordBot
- * Version:           1.1
+ * Version:           1.2
  * Author:            ReviveToday, soup-bowl
  * Author URI:        https://revive.today
  * License:           MIT
@@ -23,6 +23,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use wpupdatediscordbot\Discord;
 use wpupdatediscordbot\Settings;
+use wpupdatediscordbot\Metabox;
 
 /**
  * Fun stuff.
@@ -43,11 +44,18 @@ class WordPressUpdateDiscordBot {
 	protected $settings;
 
 	/**
+	 * Metabox actions.
+	 *
+	 * @var Metabox
+	 */
+	protected $metabox;
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
 		$this->discord  = new Discord();
 		$this->settings = new Settings();
+		$this->metabox  = new Metabox();
 	}
 
 	/**
@@ -56,6 +64,7 @@ class WordPressUpdateDiscordBot {
 	 */
 	public function hooks():void {
 		$this->settings->hooks();
+		$this->metabox->hooks();
 
 		add_action( 'publish_post', array( &$this->discord, 'publish_handler' ), 10, 2 );
 		add_action( 'publish_page', array( &$this->discord, 'publish_handler' ), 10, 2 );

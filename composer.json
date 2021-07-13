@@ -4,7 +4,8 @@
     "autoload": {
         "classmap": [
 			"class-discord.php",
-			"class-settings.php"
+			"class-settings.php",
+			"class-metabox.php"
 		]
     },
 	"require-dev": {
