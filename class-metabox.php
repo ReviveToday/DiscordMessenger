@@ -14,15 +14,6 @@ namespace wpupdatediscordbot;
  */
 class Metabox {
 	/**
-	 * Hooks into the WordPress system.
-	 *
-	 * @return void Runs add_action to hook into WP.
-	 */
-	public function hooks():void {
-		add_action( 'add_meta_boxes', array( &$this, 'form_setup' ) );
-	}
-
-	/**
 	 * Adds a box in editor view to enable custom settings.
 	 *
 	 * @return void Adds meta boxes into WP.

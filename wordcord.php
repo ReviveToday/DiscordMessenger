@@ -21,54 +21,13 @@
  */
 require_once __DIR__ . '/vendor/autoload.php';
 
-use wpupdatediscordbot\Discord;
-use wpupdatediscordbot\Settings;
-use wpupdatediscordbot\Metabox;
+$settings = new wpupdatediscordbot\Settings();
+add_action( 'admin_menu', array( &$settings, 'add_admin_menu' ) );
+add_action( 'admin_init', array( &$settings, 'settings_init' ) );
 
-/**
- * Fun stuff.
- */
-class WordPressUpdateDiscordBot {
-	/**
-	 * Discord functions.
-	 *
-	 * @var Discord
-	 */
-	protected $discord;
+$metabox = new wpupdatediscordbot\Metabox();
+add_action( 'add_meta_boxes', array( &$metabox, 'form_setup' ) );
 
-	/**
-	 * Settings API actions.
-	 *
-	 * @var Settings
-	 */
-	protected $settings;
-
-	/**
-	 * Metabox actions.
-	 *
-	 * @var Metabox
-	 */
-	protected $metabox;
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		$this->discord  = new Discord();
-		$this->settings = new Settings();
-		$this->metabox  = new Metabox();
-	}
-
-	/**
-	 * The driver hooks a function by patching the system call table, so it's not safe to unload it unless another
-	 * thread's about to jump in there and do its stuff, and you don't want to end up in the middle of invalid memory.
-	 */
-	public function hooks():void {
-		$this->settings->hooks();
-		$this->metabox->hooks();
-
-		add_action( 'publish_post', array( &$this->discord, 'publish_handler' ), 10, 2 );
-		add_action( 'publish_page', array( &$this->discord, 'publish_handler' ), 10, 2 );
-	}
-}
-
-( new WordPressUpdateDiscordBot() )->hooks();
+$discord = new wpupdatediscordbot\Discord();
+add_action( 'publish_post', array( &$discord, 'publish_handler' ), 10, 2 );
+add_action( 'publish_page', array( &$discord, 'publish_handler' ), 10, 2 );

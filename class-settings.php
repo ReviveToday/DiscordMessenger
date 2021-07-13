@@ -30,12 +30,9 @@ class Settings {
 	/**
 	 * Registers the relevant WordPress hooks upon creation.
 	 */
-	public function hooks():void {
+	public function __construct() {
 		$this->default_timeout = 60;
 		$this->default_message = 'New entry or updates made to **{{post_title}}**.';
-
-		add_action( 'admin_menu', array( &$this, 'add_admin_menu' ) );
-		add_action( 'admin_init', array( &$this, 'settings_init' ) );
 	}
 
 	/**
