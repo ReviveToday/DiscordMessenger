@@ -109,6 +109,7 @@ class Settings {
 		$opt = get_option( 'wpupdatediscordbot_hookurl' );
 		?>
 		<input class='regular-text ltr' type='text' name='wpupdatediscordbot_hookurl' value='<?php echo esc_attr( $opt ); ?>' placeholder='https://discord.com/api/webhooks/blahblah...'>
+		<p class='description'><?php esc_html_e( 'The hook URL can be found in Discord at Server Settings > Integrations > Webhooks.', 'wordcord' ); ?></p>
 		<?php
 	}
 
