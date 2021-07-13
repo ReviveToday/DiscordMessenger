@@ -1,4 +1,4 @@
-name: Deploy to WordPress.org
+name: Create Plugin Package
 on:
   release:
     types: [published]
@@ -18,10 +18,11 @@ jobs:
       run:
         ls -la
     - name: Build Plugin Package
-      uses: papeloto/action-zip@v1
+      uses: ncipollo/release-action@v1
       with:
-        files: vendor/ class-discord.php class-settings.php composer.json composer.lock wordcord.php
-        dest: wordcord.zip
+        exclusions: '.git .github .gitignore docker-compose.yml phpcs.xml phpunit.xml'
+        artifacts: wordcord.zip
+        token: ${{ secrets.GITHUB_TOKEN }}
     - name: Upload release asset
       uses: actions/upload-release-asset@v1
       env:
