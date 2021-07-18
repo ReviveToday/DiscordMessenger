@@ -12,7 +12,7 @@ Sends post and page interactions to a designated bot user webhook.
 == Description ==
 If you're looking to have your discord channel updated with the latest going on with your WordPress blog, look no further. With this plugin, all post & page activity on your site will post an update to a channel/webhook of your choice!
 
-This plugin is **open source** and [can be found here](https://github.com/ReviveToday/WPUpdateDiscordBot).
+This plugin is **open source** and [can be found here](https://github.com/ReviveToday/DiscordMessenger).
 
 == Frequently Asked Questions ==
 = Where do I find webooks? =
