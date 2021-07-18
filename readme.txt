@@ -1,5 +1,5 @@
 === Discord Messenger ===
-Contributors: soupbowl
+Contributors: revivetoday, soupbowl
 Tags: discord,post,page,update,bot,hook,webhook
 Requires at least: 4.9
 Tested up to: 5.8
@@ -21,6 +21,9 @@ This plugin is **open source** and [can be found here](https://github.com/Revive
 This is also accessible by right-clicking a desired channel, and clicking **Edit channel**.
 
 == Changelog ==
+= 1.2.1 =
+* Internal changes to allow for upload to the WordPress Codex.
+
 = 1.2 =
 * Option to one-time disable the updater on a post/page.
 

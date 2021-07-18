@@ -2,15 +2,15 @@
 /**
  * Sends post and page interactions to a designated bot user webhook.
  *
- * @package wp-update-discord-bot
+ * @package discord-messenger
  * @author soup-bowl <code@soupbowl.io>
  * @license MIT
  *
  * @wordpress-plugin
- * Plugin Name:       WordPress Update Discord Bot
+ * Plugin Name:       Discord Messenger
  * Description:       Sends post and page interactions to a designated bot user webhook.
- * Plugin URI:        https://github.com/ReviveToday/WPUpdateDiscordBot
- * Version:           1.2
+ * Plugin URI:        https://github.com/ReviveToday/DiscordMessenger
+ * Version:           1.2.1
  * Author:            ReviveToday, soup-bowl
  * Author URI:        https://revive.today
  * License:           MIT

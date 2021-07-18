@@ -2,7 +2,7 @@
 /**
  * Sends post and page interactions to a designated bot user webhook.
  *
- * @package wp-update-discord-bot
+ * @package discord-messenger
  * @author soup-bowl <code@soupbowl.io>
  * @license MIT
  */
