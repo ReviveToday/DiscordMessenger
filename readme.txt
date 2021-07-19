@@ -1,4 +1,4 @@
-=== Discord Messenger ===
+=== Messenger for Discord ===
 Contributors: revivetoday, soupbowl
 Tags: discord,post,page,update,bot,hook,webhook
 Requires at least: 4.9
@@ -22,7 +22,7 @@ This is also accessible by right-clicking a desired channel, and clicking **Edit
 
 == Changelog ==
 = 1.2.1 =
-* Internal changes to allow for upload to the WordPress Codex.
+* Internal changes to allow for upload to the WordPress Codex (x2).
 
 = 1.2 =
 * Option to one-time disable the updater on a post/page.

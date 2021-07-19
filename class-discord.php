@@ -2,12 +2,12 @@
 /**
  * Sends post and page interactions to a designated bot user webhook.
  *
- * @package discord-messenger
+ * @package rt-post-messenger
  * @author soup-bowl <code@soupbowl.io>
  * @license MIT
  */
 
-namespace wpupdatediscordbot;
+namespace rtmessenger;
 
 use WP_Post;
 
