@@ -9,7 +9,7 @@
  * @wordpress-plugin
  * Plugin Name:       Messenger for Discord
  * Description:       Sends post and page interactions to a designated bot user webhook.
- * Plugin URI:        https://github.com/ReviveToday/DiscordMessenger
+ * Plugin URI:        https://github.com/ReviveToday/Messenger-for-Discord
  * Version:           1.2.1
  * Author:            ReviveToday, soup-bowl
  * Author URI:        https://revive.today
